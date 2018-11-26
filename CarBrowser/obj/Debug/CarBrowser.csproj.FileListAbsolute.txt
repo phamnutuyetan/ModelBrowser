@@ -20,3 +20,4 @@ D:\WPFProjects\CarBrowser\CarBrowser\obj\Debug\CarBrowser.csproj.CoreCompileInpu
 D:\WPFProjects\CarBrowser\CarBrowser\obj\Debug\CarBrowser.csproj.CopyComplete
 D:\WPFProjects\CarBrowser\CarBrowser\obj\Debug\CarBrowser.exe
 D:\WPFProjects\CarBrowser\CarBrowser\obj\Debug\CarBrowser.pdb
+D:\WPFProjects\CarBrowser\CarBrowser\obj\Debug\CarBrowser.csprojAssemblyReference.cache

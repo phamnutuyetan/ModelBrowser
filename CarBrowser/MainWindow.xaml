@@ -12,17 +12,26 @@
             <ColumnDefinition Width="617*"/>
             <ColumnDefinition Width="177*"/>
         </Grid.ColumnDefinitions>
-        <TextBox HorizontalAlignment="Left" Height="31" Margin="5.2,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="169" Grid.Column="1"/>
-        <ListView HorizontalAlignment="Left" Height="364" Margin="5.2,46,0,0" VerticalAlignment="Top" Width="170" Grid.Column="1">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+        <TextBox x:Name="txtSearch" HorizontalAlignment="Left" Height="31" Margin="5.2,10,0,0" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="169" Grid.Column="1" TextChanged="txtSearch_TextChanged" />
+        <ListView x:Name="listRecentUpload" HorizontalAlignment="Left" Height="364" Margin="5.2,46,0,0" VerticalAlignment="Top" Width="170" Grid.Column="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="{Binding ThumbnailPath}" Width="20" Height="20" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding FileName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
 
-        <Button Content="Button" HorizontalAlignment="Left" Margin="565,10,0,0" VerticalAlignment="Top" Width="44" Height="31"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="516,10,0,0" VerticalAlignment="Top" Width="44" Height="31" Background="#FFDDDDDD"/>
+        <Button x:Name="btnUpModel" Content="Model" HorizontalAlignment="Left" Margin="516,10,0,0" VerticalAlignment="Top" Width="44" Height="31" ToolTip="Upload Model from your Drive" Click="btnUpModel_Click">
+        </Button>
+        <Button x:Name="btnUpTexture" Content="Texture" HorizontalAlignment="Left" Margin="565,10,0,0" VerticalAlignment="Top" Width="44" Height="31" Background="#FFDDDDDD" ToolTip="Upload Texture from your Drive" Click="btnUpTexture_Click"/>
         <Border BorderThickness="1"
                 BorderBrush="Black"
                 HorizontalAlignment="Left"

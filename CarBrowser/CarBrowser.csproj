@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UploadedItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,6 +122,7 @@
     <Resource Include="SampleModels\cube.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icons\upload-icon.png" />
     <Content Include="SampleModels\cylinder.jpg" />
     <Resource Include="SampleModels\sphere.jpg" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using HelixToolkit.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace CarBrowser
         private string CURRENT_MODEL = "D:\\WPFProjects\\CarBrowser\\CarBrowser\\SampleModels\\cube.stl";
         // Default Material for new loaded model: light blue color
         private Material DEFAULT_MATERIAL = MaterialHelper.CreateMaterial(new SolidColorBrush(Color.FromRgb(102, 153, 153)));
+        private List<UploadedItem> CURRENT_RECENT_LIST = null;
 
         #region List of file paths
         // List of sample texture image's paths. Use to dynamically create buttons and apply textures to model (Because there are many)
@@ -153,13 +155,7 @@ namespace CarBrowser
                     {
                         material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(path))));
                     }
-
-                    // Clear old stuff in view port
-                    viewPort3d.Children.Clear();
-                    // Re-add light
-                    viewPort3d.Children.Add(new SunLight());
-                    // Add new model that chosen
-                    viewPort3d.Children.Add(new ModelVisual3D() { Content = Display3d(CURRENT_MODEL, material) });
+                    RefreshViewport(CURRENT_MODEL, material);
                 };
             }
         }
@@ -191,6 +187,117 @@ namespace CarBrowser
             }
             return device;
         }
+
+        /// <summary>
+        ///     Clear Viewport, readd light and add new model
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RefreshViewport(string modelPath, Material material)
+        {
+            // Clear old stuff in view port
+            viewPort3d.Children.Clear();
+            // Re-add light
+            viewPort3d.Children.Add(new SunLight());
+            // Add new model that chosen
+            viewPort3d.Children.Add(new ModelVisual3D() { Content = Display3d(modelPath, material) });
+        }
         #endregion
+
+        #region Events
+        private void btnUpModel_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog 
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = ".stl";
+            dlg.Filter = "STL Files (*.stl)|*.stl";
+
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                CURRENT_MODEL = dlg.FileName;
+                RefreshViewport(CURRENT_MODEL, DEFAULT_MATERIAL);
+                AddToListRecentUpload(dlg);
+            }
+        }
+        #endregion
+
+        private void btnUpTexture_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog 
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            // Set filter for file extension and default file extension 
+            dlg.DefaultExt = ".jpg";
+            dlg.Filter = "JPG Files (*.jpg)|*.jpg|JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif";
+
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                Material material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(dlg.FileName))));
+                RefreshViewport(CURRENT_MODEL, material);
+                AddToListRecentUpload(dlg);
+            }
+        }
+
+        private void AddToListRecentUpload(OpenFileDialog file)
+        {
+            string imagePath = file.FileName;
+            if(file.DefaultExt == "stl")
+            {
+                imagePath = file.FileName.Split('.')[0] + ".jpg";
+            }
+            this.listRecentUpload.Items.Insert(0, new UploadedItem() { ThumbnailPath = imagePath, FileName = file.SafeFileName, FullPath = file.FileName });
+            CURRENT_RECENT_LIST = listRecentUpload.Items.Cast<UploadedItem>().ToList();
+
+        }
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as ListViewItem;
+            if (item != null && item.IsSelected)
+            {
+                var content = item.Content as UploadedItem;
+                if(content.FileName.Split('.')[1] == "stl")
+                {
+                    CURRENT_MODEL = content.FullPath;
+                    RefreshViewport(CURRENT_MODEL, DEFAULT_MATERIAL);
+                }
+                else
+                {
+                    Material material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(content.FullPath))));
+                    RefreshViewport(CURRENT_MODEL, material);
+                }
+            }
+        }
+
+        
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchText = (sender as TextBox).Text;
+           
+            listRecentUpload.Items.Clear();
+            foreach (var item in CURRENT_RECENT_LIST)
+            {
+                if (searchText == "" || searchText == null)
+                {
+                    listRecentUpload.Items.Add(item);
+                }
+                else
+                {
+                    if (item.FileName.Contains(searchText))
+                    {
+                        listRecentUpload.Items.Add(item);
+                    }
+                }
+            }
+        }
     }
 }
