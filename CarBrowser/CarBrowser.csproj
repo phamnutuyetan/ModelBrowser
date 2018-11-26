@@ -96,6 +96,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="SampleModels\cone.stl" />
+    <None Include="SampleModels\cube.stl" />
+    <None Include="SampleModels\cylinder.stl" />
+    <None Include="SampleModels\sphere.stl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -111,6 +115,14 @@
     <Resource Include="SampleTextures\sample2.jpg" />
     <Resource Include="SampleTextures\sample3.jpg" />
     <Resource Include="SampleTextures\sample4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SampleModels\cone.jpg" />
+    <Resource Include="SampleModels\cube.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SampleModels\cylinder.jpg" />
+    <Resource Include="SampleModels\sphere.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
